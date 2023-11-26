@@ -5,12 +5,12 @@ app = Application()
 
 
 @app.route("/health", method="GET")
-def health():
+def health(*args, **kwargs):
     return JSONResponse({"status": "success"})
 
 
-@app.route("/products", method="DELETE")
-def create_products():
+@app.route("/products/<product_id>/info/<info_id>", method="POST")
+def create_products(*args, **kwargs):
     return JSONResponse(
         {
             "products": [
@@ -26,18 +26,12 @@ def create_products():
 
 
 @app.route("/html", method="GET")
-def html():
-    import time
-
-    time.sleep(5)
+def html(*args, **kwargs):
     return HTMLResponse("text.html")
 
 
-@app.route("/text", method="GET")
-def text():
-    import time
-
-    time.sleep(5)
+@app.route("/text/<id>/<name>", method="GET")
+def text(*args, **kwargs):
     return TextResponse("IT IS TEXT")
 
 

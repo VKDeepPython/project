@@ -1,5 +1,6 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
+import json
 
 
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
@@ -15,7 +16,14 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         self.handle_request("GET")
 
     def do_POST(self):
-        self.handle_request("POST")
+        content_length = int(self.headers.get("Content-Length", 0))
+        body = self.rfile.read(content_length).decode("utf-8")
+        try:
+            json_data = json.loads(body)
+        except json.JSONDecodeError:
+            json_data = {}
+
+        self.handle_request("POST", json_data)
 
     def do_PUT(self):
         self.handle_request("PUT")
@@ -26,16 +34,22 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
     def do_DELETE(self):
         self.handle_request("DELETE")
 
-    def handle_request(self, method):
+    def handle_request(self, method, body={}):
         try:
             # Получение URL из запроса
             request_url = self.path
-            print(f"Получен запрос на {request_url}")
+            print(
+                f"Получен запрос на {request_url} от клиента {self.client_address[0]}"
+            )
 
-            handler = self.router.find_handler(request_url, method)
-            response = handler()
+            handler, pattern_dict, params_dict = self.router.find_handler(
+                request_url, method
+            )
+            response = handler(pattern_dict, params_dict, body)
 
+            print(f"{body=}")
             # Отправка ответа
+            print(f"Params before: {pattern_dict}, params after: {params_dict}")
             print(f"Response: {response}")
 
             self.send_response(200)
