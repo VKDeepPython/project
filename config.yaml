@@ -1,6 +1,0 @@
-created_dbname: framework_postgres_db
-created_password: 665984
-created_user: framework_postgres_user
-default_dbname: postgres
-created_host: 127.0.0.1
-created_port: 5432
