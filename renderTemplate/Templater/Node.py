@@ -1,4 +1,4 @@
-class _Node(object):
+class Node(object):
     def __init__(self, fragment=None):
         self.children = []
         self.creates_scope = False
