@@ -1,4 +1,4 @@
-from Templater.Templater import Templater
+from renderTemplate.Templater.Templater import Templater
 
 def render_template(html_page_path: str, **kwargs) -> str:
     if not isinstance(html_page_path, str):

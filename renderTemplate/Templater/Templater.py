@@ -1,7 +1,7 @@
 import re
 
-from Templater.Node import Node
-from Templater.create_node import create_node
+from renderTemplate.Templater.Node import Node
+from renderTemplate.Templater.create_node import create_node
 
 VAR_TOKEN_START = '{{'
 VAR_TOKEN_END = '}}'

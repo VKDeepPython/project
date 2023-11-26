@@ -1,4 +1,4 @@
-from Templater.Node import Node
+from renderTemplate.Templater.Node import Node
 
 
 class TextNode(Node):

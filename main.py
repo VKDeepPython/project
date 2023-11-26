@@ -1,6 +1,7 @@
 from app import Application
-from responses import JSONResponse, TextResponse, HTMLResponse
+from responses import JSONResponse, TextResponse, HTMLResponse, HTMLTextResponse
 from database import Model, users
+from renderTemplate.render_template import render_template
 
 app = Application()
 
@@ -44,7 +45,7 @@ def create_user(*args, **kwargs):
 def get_user(*args, **kwargs):
     pattern_dict = args[0]
     user = users.find("id", pattern_dict['id'])
-    print(users.all())
+    # print(users.all())
 
     return JSONResponse({"response": user})
 
@@ -53,6 +54,43 @@ def get_users(*args, **kwargs):
     res = users.all()
 
     return JSONResponse({"response": res})
+
+@app.route("/user_template/<id>", method="GET")
+def get_users_template(*args, **kwargs):
+    pattern_dict = args[0]
+    # print(pattern_dict)
+    # print(f"id = {pattern_dict['id']}")
+    user_id = int(pattern_dict['id'])
+    user = users.find('id', user_id)
+    user_name = user[0][1]
+    user_age = user[0][2]
+    print(f"username = {user_name}")
+    # html = render_template()
+    # res = users.all()
+    html = render_template(
+        "templates/user.html", 
+        name=user_name, 
+        age=user_age,
+    )
+
+    # return HTMLResponse("text.html")
+    # return TextResponse(html)
+    return HTMLTextResponse(html)
+
+@app.route("/user_template2/<id>", method="GET")
+def get_users_template(*args, **kwargs):
+    pattern_dict = args[0]
+    user_id = int(pattern_dict['id'])
+    user = users.find('id', user_id)
+    user_name = user[0][1]
+    user_age = user[0][2]
+    html = render_template(
+        "templates/user.html", 
+        name=user_name, 
+        age=user_age,
+    )
+
+    return TextResponse(html)
 
 if __name__ == "__main__":
     app.start()

@@ -1,7 +1,7 @@
-from Templater.ForNode import ForNode
-from Templater.IfNode import IfNode
-from Templater.TextNode import TextNode
-from Templater.VariableNode import VariableNode
+from renderTemplate.Templater.ForNode import ForNode
+from renderTemplate.Templater.IfNode import IfNode
+from renderTemplate.Templater.TextNode import TextNode
+from renderTemplate.Templater.VariableNode import VariableNode
 
 def create_node(fragment):
     if fragment.startswith('{% for'):
