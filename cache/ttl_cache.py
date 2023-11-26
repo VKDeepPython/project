@@ -1,14 +1,15 @@
 from lru_cache import LRUCache
 
-# not working
+
 def ttl_cache(ttl, limit):
     lru = LRUCache(limit)
 
     def decorator(func):
-        def inner(*args, **kwargs):
-            if [args, kwargs] in lru.cache:
-                return lru.get([args, kwargs])
-            res = func(*args, **kwargs)
+        def inner(path, method):
+            key = str(path) + str(method)
+            if key in lru.cache:
+                return lru.get(key)
+            res = func(path, method)
             return res
         return inner
     return decorator
