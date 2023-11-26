@@ -12,12 +12,27 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         super().__init__(*args, **kwargs)
 
     def do_GET(self):
+        self.handle_request("GET")
+
+    def do_POST(self):
+        self.handle_request("POST")
+
+    def do_PUT(self):
+        self.handle_request("PUT")
+
+    def do_PATCH(self):
+        self.handle_request("PATCH")
+
+    def do_DELETE(self):
+        self.handle_request("DELETE")
+
+    def handle_request(self, method):
         try:
             # Получение URL из запроса
             request_url = self.path
             print(f"Получен запрос на {request_url}")
 
-            handler = self.router.find_handler(request_url, "GET")
+            handler = self.router.find_handler(request_url, method)
             response = handler()
 
             # Отправка ответа

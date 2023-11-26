@@ -2,7 +2,7 @@ from exceptions import NotFoundError
 
 
 class Router:
-    methods = {"GET", "POST"}
+    methods = {"GET", "POST", "PUT", "PATCH", "DELETE"}
 
     def __init__(self):
         self.routes = {}
