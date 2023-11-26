@@ -1,9 +1,5 @@
 from urllib.parse import urlparse, unquote
-import re
 
-
-url1 = "main/accounts/<id>/<name>"
-url2 = "main/accounts/10/John?name=John&age=25"
 
 def parse_after_question_mark(url):
     url = unquote(url)
@@ -29,6 +25,7 @@ def parse_between_quotes(url1, url2):
     path1_parts = path1.split("/")
     path2_parts = path2.split("/")
 
+
     dictionary = {}
     for i in range(len(path1_parts)):
         if path1_parts[i].startswith("<") and path1_parts[i].endswith(">"):
@@ -39,7 +36,11 @@ def parse_between_quotes(url1, url2):
     return dictionary
 
 
-print(parse_after_question_mark(url2))
-print(parse_between_quotes(url1, url2))
-# {'name': 'John', 'age': '25'}
-# {'id': '10', 'name': 'John'}
+if __name__ == "__main__":
+    url1 = "main/accounts/<id>/<name>"
+    url2 = "main/accounts/10/John?name=John&age=25"
+    print(parse_after_question_mark(url2))
+    print(parse_between_quotes(url1, url2))
+    # {'name': 'John', 'age': '25'}
+    # {'id': '10', 'name': 'John'}
+    
