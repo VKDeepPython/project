@@ -22,11 +22,11 @@ class Model:
         columns_definition = ["id SERIAL PRIMARY KEY"]
         for column_name, column_type in self.columns.items():
             pg_type = type_mapping.get(column_type, 'VARCHAR(255)')
-            columns_definition.append(f'{column_name} {pg_type}')
+            columns_definition.append(f'"{column_name}" {pg_type}')
         
         query = f"CREATE TABLE IF NOT EXISTS \"{self.table_name}\" ({', '.join(columns_definition)});"
         self.conn.execute(query)
-        
+
     def __convert_type_python_to_sql(self, value):
         if isinstance(value, str):
             sql_value = '\'' + value + '\''
@@ -42,11 +42,11 @@ class Model:
 
     def find(self, column, value):
         sql_value = self.__convert_type_python_to_sql(value)
-        query = f"SELECT * FROM \"{self.table_name}\" WHERE {column} = {sql_value}"
+        query = f"SELECT * FROM \"{self.table_name}\" WHERE \"{column}\" = {sql_value}"
         return self.conn.fetch(query)
 
     def insert(self, columns, values):
-        sql_columns = ', '.join(columns)
+        sql_columns = ', '.join(['"' + column + '"' for column in columns])
         sql_values = ''
         for value in values:
             sql_values += self.__convert_type_python_to_sql(value)
@@ -57,18 +57,18 @@ class Model:
 
     def delete(self, column, value):
         sql_value = self.__convert_type_python_to_sql(value)
-        query = f"DELETE FROM \"{self.table_name}\" WHERE {column} = {sql_value} RETURNING id;"
+        query = f"DELETE FROM \"{self.table_name}\" WHERE \"{column}\" = {sql_value} RETURNING id;"
         return self.conn.fetch(query)
 
     def update(self, column_values: dict, cond_column: str, cond_value: any):
         updates = []
         for column_name, new_value in column_values.items():
             sql_new_value = self.__convert_type_python_to_sql(new_value)
-            updates.append(f'{column_name} = {sql_new_value}')
+            updates.append(f'\"{column_name}\" = {sql_new_value}')
         
         sql_cond_value = self.__convert_type_python_to_sql(cond_value)
         
-        query = f"UPDATE \"{self.table_name}\" SET {', '.join(updates)} WHERE {cond_column} = {sql_cond_value};"
+        query = f"UPDATE \"{self.table_name}\" SET {', '.join(updates)} WHERE \"{cond_column}\" = {sql_cond_value};"
         return self.conn.execute(query)
 
 
@@ -76,13 +76,18 @@ if __name__ == '__main__':
     conn = Connection()
     table_name = "Users"
     columns = {"name": str, "age": int}
-    user = Model(conn, table_name, columns)
-    print(user.insert(["name", "age"], ["test", 21]))
-    print(user.insert(["name", "age"], ["some person", 45]))
-    print(user.all())
-    print(user.find("name", "test"))
-    print(user.delete("name", "test"))
-    print(user.all())
+    users = Model(conn, table_name, columns)
+    print(users.insert(["name", "age"], ["test", 21]))
+    print(users.insert(["name", "age"], ["some person", 45]))
+    print(users.all())
+    print(users.find("name", "test"))
+    print(users.delete("name", "test"))
+    print(users.all())
     new_values = {"age": 50}
-    print(user.update(new_values, "name", "some person"))
-    print(user.all())
+    print(users.update(new_values, "name", "some person"))
+    print(users.all())
+    
+    orders = Model(conn, "Orders", {"name": str, "is available": bool})
+    print(orders.insert(["name", "is available"], ["test", False]))
+    print(orders.all())
+
