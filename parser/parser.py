@@ -15,9 +15,9 @@ def parse_after_question_mark(url):
 
 def parse_between_quotes(pattern, url):
     url1 = unquote(pattern)
-    parsed_url1 = urlparse(pattern)
+    parsed_url1 = urlparse(url1)
     url2 = unquote(url)
-    parsed_url2 = urlparse(url)
+    parsed_url2 = urlparse(url2)
 
     path1 = parsed_url1.path
     path2 = parsed_url2.path
