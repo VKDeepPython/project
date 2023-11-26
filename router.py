@@ -1,5 +1,6 @@
 from exceptions import NotFoundError
 
+
 class Router:
     methods = {"GET", "POST"}
 
@@ -14,4 +15,6 @@ class Router:
     def find_handler(self, path, method):
         if path in self.routes and method in self.routes[path]:
             return self.routes[path][method]
-        raise NotFoundError(f"Route for path '{path}' with method '{method}' not found.")
+        raise NotFoundError(
+            f"Route for path '{path}' with method '{method}' not found."
+        )

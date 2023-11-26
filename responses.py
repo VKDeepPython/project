@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 import json
 
-class TextResponse(ABC):
-    header = 'text/plain'
+
+class BaseResponse(ABC):
+    header = "text/plain"
 
     @abstractmethod
     def __init__(self, response):
@@ -12,27 +13,33 @@ class TextResponse(ABC):
     def get_bytes_response(self):
         pass
 
-class JSONResponse(TextResponse):
-    header = 'application/json'
+
+class JSONResponse(BaseResponse):
+    header = "application/json"
 
     def __init__(self, response):
-        try:
-            self.response = json.dumps(json.loads(response))
-        except json.JSONDecodeError as err:
-            raise ValueError('invalid JSON') from err
+        self.response = json.dumps(response)
 
     def get_bytes_response(self):
-        response_json = json.dumps(self.response)
-        return response_json.encode('utf-8')
-    
-class HTMLResponse(TextResponse):
-    header = 'text/html'
-    
-    def init(self, response):
-        self.response = response
+        return self.response.encode("utf-8")
 
-class TextResponse(TextResponse):
-    header = 'text/plain'
-    
+
+class HTMLResponse(BaseResponse):
+    header = "text/html"
+
+    def __init__(self, file_path):
+        with open(f"templates/{file_path}", "r", encoding="utf-8") as file:
+            self.response = file.read()
+
+    def get_bytes_response(self):
+        return self.response.encode("utf-8")
+
+
+class TextResponse(BaseResponse):
+    header = "text/plain"
+
     def __init__(self, response):
         self.response = response
+
+    def get_bytes_response(self):
+        return self.response.encode("utf-8")
