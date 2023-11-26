@@ -1,4 +1,4 @@
-from connection import Connection
+from orm.connection import Connection
 
 
 class Model:

@@ -1,6 +1,6 @@
 created_dbname: test10_postgres_db
 created_host: 127.0.0.1
-created_password: 930664
+created_password: 999775
 created_port: 5432
 created_user: test10_postgres_user
 default_dbname: postgres

@@ -2,7 +2,7 @@ import psycopg2
 from psycopg2 import sql
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import random
-from config import Config
+from orm.config import Config
 
 class DatabaseCreator:
     def __init__(self, config_path='config.yaml') -> None:

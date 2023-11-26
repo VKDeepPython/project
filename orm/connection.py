@@ -1,5 +1,5 @@
 import psycopg2
-from config import Config
+from orm.config import Config
 
 class Connection:
     def __init__(self, config_path='config.yaml'):
