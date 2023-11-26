@@ -43,15 +43,13 @@ def parse_between_quotes(pattern, url):
             except:
                 raise ValueError("Invalid format")
 
-    
-
     return dictionary
 
 
 if __name__ == "__main__":
-    pattern = "/main/accounts/<id:int>/<name:int>"
+    pattern = "/main/accounts/<id:int>/<name>"
     url = "/main/accounts/10/John?name=John&age=25"
     print(parse_after_question_mark(url))
     print(parse_between_quotes(pattern, url))
     # {'name': 'John', 'age': '25'}
-    # {'id': '10', 'name': 'John'}
+    # {'id': 10, 'name': 'John'}
