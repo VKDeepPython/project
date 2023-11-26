@@ -28,15 +28,28 @@ def parse_between_quotes(pattern, url):
     dictionary = {}
     for i in range(len(path1_parts)):
         if path1_parts[i].startswith("<") and path1_parts[i].endswith(">"):
-            if i < len(path2_parts):
-                dictionary.update({path1_parts[i].strip("<>"):path2_parts[i]})
-            else:
-                dictionary.update({path1_parts[i].strip("<>"):None})
+            sep = path1_parts[i][1:-1].split(":")
+            try:
+                if i < len(path2_parts):
+                    if sep[0] == path1_parts[i][1:-1]:
+                        dictionary.update({sep[0]:str(path2_parts[i])})
+                    else:
+                        if sep[1] == "str":
+                            dictionary.update({sep[0]:str(path2_parts[i])})
+                        elif sep[1]  == "int":
+                            dictionary.update({sep[0]:int(path2_parts[i])})
+                else:
+                    dictionary.update({sep[0]:None})
+            except:
+                raise ValueError("Invalid format")
+
+    
+
     return dictionary
 
 
 if __name__ == "__main__":
-    pattern = "/main/accounts/<id>/<name>"
+    pattern = "/main/accounts/<id:int>/<name:int>"
     url = "/main/accounts/10/John?name=John&age=25"
     print(parse_after_question_mark(url))
     print(parse_between_quotes(pattern, url))
