@@ -13,18 +13,17 @@ def parse_after_question_mark(url):
     return dictionary
 
 
-def parse_between_quotes(url1, url2):
-    url1 = unquote(url1)
-    parsed_url1 = urlparse(url1)
-    url2 = unquote(url2)
-    parsed_url2 = urlparse(url2)
+def parse_between_quotes(pattern, url):
+    url1 = unquote(pattern)
+    parsed_url1 = urlparse(pattern)
+    url2 = unquote(url)
+    parsed_url2 = urlparse(url)
 
     path1 = parsed_url1.path
     path2 = parsed_url2.path
 
-    path1_parts = path1.split("/")
-    path2_parts = path2.split("/")
-
+    path1_parts = list(filter(None, path1.split("/")))
+    path2_parts = list(filter(None, path2.split("/")))
 
     dictionary = {}
     for i in range(len(path1_parts)):
@@ -37,10 +36,9 @@ def parse_between_quotes(url1, url2):
 
 
 if __name__ == "__main__":
-    url1 = "main/accounts/<id>/<name>"
-    url2 = "main/accounts/10/John?name=John&age=25"
-    print(parse_after_question_mark(url2))
-    print(parse_between_quotes(url1, url2))
+    pattern = "/main/accounts/<id>/<name>"
+    url = "/main/accounts/10/John?name=John&age=25"
+    print(parse_after_question_mark(url))
+    print(parse_between_quotes(pattern, url))
     # {'name': 'John', 'age': '25'}
     # {'id': '10', 'name': 'John'}
-    
