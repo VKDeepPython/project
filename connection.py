@@ -1,8 +1,9 @@
 import psycopg2
-from config import config
+from config import Config
 
 class Connection:
-    def __init__(self):
+    def __init__(self, config_path='config.yaml'):
+        self.config = Config(config_path)
         self.conn = None
         self.cur = None
         self.connect()
@@ -10,11 +11,11 @@ class Connection:
     def connect(self):
         try:
             self.conn = psycopg2.connect(
-                dbname=config['dbname'],
-                user=config['user'],
-                host=config['host'],
-                password=config['password'],
-                port=config['port']
+                dbname=self.config['created_dbname'],
+                user=self.config['created_user'],
+                host=self.config['created_host'],
+                password=self.config['created_password'],
+                port=self.config['created_port']
             )
             self.cur = self.conn.cursor()
             print("Connected to the database.")
@@ -34,7 +35,3 @@ class Connection:
 
     def __del__(self):
         self.close()
-
-
-if __name__ == '__main__':
-    connection = Connection()

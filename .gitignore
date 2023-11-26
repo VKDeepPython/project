@@ -1,4 +1,2 @@
 __pycache__
-
-# Личные данные для подключения к БД
-config.py
+.gitignore
