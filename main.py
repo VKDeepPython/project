@@ -78,7 +78,7 @@ def get_users_template(*args, **kwargs):
     return HTMLTextResponse(html)
 
 @app.route("/user_template2/<id>", method="GET")
-def get_users_template(*args, **kwargs):
+def get_users_template1(*args, **kwargs):
     pattern_dict = args[0]
     user_id = int(pattern_dict['id'])
     user = users.find('id', user_id)
@@ -91,6 +91,32 @@ def get_users_template(*args, **kwargs):
     )
 
     return TextResponse(html)
+
+@app.route("/user_template3/<id>", method="GET")
+def get_users_template2(*args, **kwargs):
+    params_dict = args[1]
+    pattern_dict = args[0]
+    user_id = int(pattern_dict['id'])
+    user = users.find('id', user_id)
+    user_name = user[0][1]
+    user_age = user[0][2]
+    is_age = False
+    try:
+        is_age = params_dict['is_age'] 
+    except Exception as e:
+        pass
+
+    print(f"is age {params_dict}")
+    print(f"is age {is_age}")
+
+    html = render_template(
+        "templates/user2.html", 
+        name=user_name, 
+        age=user_age,
+        is_age=bool(is_age)
+    )
+
+    return HTMLTextResponse(html)
 
 if __name__ == "__main__":
     app.start()
