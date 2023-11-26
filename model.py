@@ -29,7 +29,7 @@ class Model:
     def all(self):
         query = f"SELECT * FROM \"{self.table_name}\""
         return self.conn.fetch(query)
-    
+
     def find(self, column, value):
         if isinstance(value, str):
             sql_value = '\'' + value + '\''
@@ -39,7 +39,7 @@ class Model:
             sql_value = str(value).upper()
         query = f"SELECT * FROM \"{self.table_name}\" WHERE {column} = {sql_value}"
         return self.conn.fetch(query)
-    
+
     def insert(self, columns, values):
         sql_columns = ', '.join(columns)
         sql_values = ''
@@ -52,9 +52,18 @@ class Model:
                 sql_values += str(value).upper()
             sql_values += ','
         sql_values = sql_values[:-1]
-        query = f"INSERt INTO \"{self.table_name}\" ({sql_columns}) VALUES ({sql_values}) RETURNING id;"
+        query = f"INSERT INTO \"{self.table_name}\" ({sql_columns}) VALUES ({sql_values}) RETURNING id;"
         return self.conn.fetch(query)
 
+    def delete(self, column, value):
+        if isinstance(value, str):
+            sql_value = '\'' + value + '\''
+        elif isinstance(value, int) or isinstance(value, float):
+            sql_value = str(value)
+        elif isinstance(value, bool):
+            sql_value = str(value).upper()
+        query = f"DELETE FROM \"{self.table_name}\" WHERE {column} = {sql_value} RETURNING id;"
+        return self.conn.fetch(query)
 
 if __name__ == '__main__':
     conn = Connection()
@@ -65,3 +74,5 @@ if __name__ == '__main__':
     print(user.insert(["name", "age"], ["some person", 45]))
     print(user.all())
     print(user.find("name", "test"))
+    print(user.delete("name", "test"))
+    print(user.all())
