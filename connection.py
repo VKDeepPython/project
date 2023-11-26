@@ -21,13 +21,18 @@ class Connection:
         except Exception as e:
             print(f"Error connecting to the database: {e}")
 
-    def execute(self, query, data):
+    def execute(self, query, params=None):
         try:
-            print('SQL: %s' % query)
-            self.cur.execute(query, data)
+            # print("SQL: ", query)
+            self.cur.execute(query, params)
             self.conn.commit()
         except Exception as e:
             print(f"Error executing query: {e}")
+
+    def fetch(self, query, params=None):
+        # print("SQL: ", query)
+        self.cur.execute(query, params)
+        return self.cur.fetchall()
 
     def close(self):
         self.conn.close() 
