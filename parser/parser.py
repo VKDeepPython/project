@@ -38,6 +38,8 @@ def parse_between_quotes(pattern, url):
                             dictionary.update({sep[0]:str(path2_parts[i])})
                         elif sep[1]  == "int":
                             dictionary.update({sep[0]:int(path2_parts[i])})
+                        else:
+                            raise ValueError("Invalid format")
                 else:
                     dictionary.update({sep[0]:None})
             except:
@@ -47,7 +49,7 @@ def parse_between_quotes(pattern, url):
 
 
 if __name__ == "__main__":
-    pattern = "/main/accounts/<id:int>/<name>"
+    pattern = "/main/accounts/<id:int>/<name:str>"
     url = "/main/accounts/10/John?name=John&age=25"
     print(parse_after_question_mark(url))
     print(parse_between_quotes(pattern, url))
