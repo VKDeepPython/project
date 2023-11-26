@@ -35,6 +35,15 @@ class HTMLResponse(BaseResponse):
         return self.response.encode("utf-8")
 
 
+class HTMLTextResponse(BaseResponse):
+    header = "text/html"
+
+    def __init__(self, response):
+        self.response = response
+
+    def get_bytes_response(self):
+        return self.response.encode("utf-8")
+
 class TextResponse(BaseResponse):
     header = "text/plain"
 

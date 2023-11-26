@@ -47,7 +47,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
             )
             response = handler(pattern_dict, params_dict, body)
 
-            print(f"{body=}")
+            print(f"Body {body=}")
             # Отправка ответа
             print(f"Params before: {pattern_dict}, params after: {params_dict}")
             print(f"Response: {response}")
